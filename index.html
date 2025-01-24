@@ -1,56 +1,56 @@
 <!DOCTYPE html>
 <html>
-<!-- Head section remains exactly the same -->
-<head>
-    <!-- Previous head content remains exactly the same -->
-</head>
-<body>
-    <!-- Previous body content remains exactly the same until the script section -->
+<!-- Previous head and body content remains exactly the same until the script section -->
+<script>
+    const paragraphs = {
+        '1': `The interview was conducted but actually before that I had trouble scheduling it because John was really busy with all his activities and work which made it hard to find a time that worked for both of us. John Smith is a senior business major who works part-time at the campus bookstore and is also involved in three clubs. The career center helps students with various things like resumes and interviews and networking and LinkedIn profiles. He goes there every week because he thinks it's important.`,
+        '2': `I interviewed John last Tuesday after his classes were done for the day and he seemed pretty tired but still willing to talk to me. It was in the library's second floor study room B which I reserved for an hour just to make sure we had enough time and privacy and it was actually a really nice quiet space except for when a group of loud students walked by. I asked questions about his experience, specifically focusing on his academic journey and career preparation.`,
+        '3': `Programming classes present numerous challenges for new students because they require a completely different way of thinking and problem-solving that most students haven't encountered before in their academic careers and this can be overwhelming especially in the beginning when everything feels new and confusing. Students fail them sometimes, particularly the first programming course which has a 30% failure rate according to John.`,
+        '4': `Based on my research and interview findings the following recommendations can be made for future students who want to succeed in the computer science program at our university which has been consistently ranked in the top 50 programs nationwide according to various publications and rankings that I found online while doing background research for this project. The tutoring center is located in the library's second floor right next to the computer lab.`
+    };
 
-    <script>
-        const paragraphs = {
-            '1': `The interview was conducted but actually before that I had trouble scheduling it because John was really busy with all his activities and work which made it hard to find a time that worked for both of us. John Smith is a senior business major who works part-time at the campus bookstore and is also involved in three clubs. The career center helps students with various things like resumes and interviews and networking and LinkedIn profiles. He goes there every week because he thinks it's important.`,
-            '2': `I interviewed John last Tuesday after his classes were done for the day and he seemed pretty tired but still willing to talk to me. It was in the library's second floor study room B which I reserved for an hour just to make sure we had enough time and privacy and it was actually a really nice quiet space except for when a group of loud students walked by. I asked questions about his experience, specifically focusing on his academic journey and career preparation.`,
-            '3': `Programming classes present numerous challenges for new students because they require a completely different way of thinking and problem-solving that most students haven't encountered before in their academic careers and this can be overwhelming especially in the beginning when everything feels new and confusing. Students fail them sometimes, particularly the first programming course which has a 30% failure rate according to John.`,
-            '4': `Based on my research and interview findings the following recommendations can be made for future students who want to succeed in the computer science program at our university which has been consistently ranked in the top 50 programs nationwide according to various publications and rankings that I found online while doing background research for this project. The tutoring center is located in the library's second floor right next to the computer lab.`
+    // Function to reset all form fields
+    function resetFields() {
+        document.getElementById('simple-count').value = '';
+        document.getElementById('compound-count').value = '';
+        document.getElementById('complex-count').value = '';
+        document.getElementById('main-topic').value = '';
+        document.getElementById('off-topic').value = '';
+        document.getElementById('revision').value = '';
+        document.getElementById('reflection').value = '';
+    }
+
+    // Function to update paragraph text
+    function updateParagraph(value) {
+        document.getElementById('paragraph-text').textContent = paragraphs[value];
+        resetFields();
+    }
+
+    // Display initial paragraph and reset fields
+    updateParagraph('1');
+
+    // Update paragraph when selection changes
+    document.getElementById('paragraph-select').addEventListener('change', function(e) {
+        updateParagraph(e.target.value);
+    });
+
+    function collectFormData() {
+        const data = {
+            selectedParagraph: document.getElementById('paragraph-select').value,
+            paragraphText: document.getElementById('paragraph-text').textContent,
+            simpleSentences: document.getElementById('simple-count').value,
+            compoundSentences: document.getElementById('compound-count').value,
+            complexSentences: document.getElementById('complex-count').value,
+            mainTopic: document.getElementById('main-topic').value,
+            offTopic: document.getElementById('off-topic').value,
+            revision: document.getElementById('revision').value,
+            reflection: document.getElementById('reflection').value
         };
+        return data;
+    }
 
-        // Display initial paragraph
-        document.getElementById('paragraph-text').textContent = paragraphs['1'];
-
-        // Reset all form fields
-        function resetFields() {
-            document.getElementById('simple-count').value = '';
-            document.getElementById('compound-count').value = '';
-            document.getElementById('complex-count').value = '';
-            document.getElementById('main-topic').value = '';
-            document.getElementById('off-topic').value = '';
-            document.getElementById('revision').value = '';
-            document.getElementById('reflection').value = '';
-        }
-
-        // Update paragraph when selection changes
-        document.getElementById('paragraph-select').addEventListener('change', function(e) {
-            document.getElementById('paragraph-text').textContent = paragraphs[e.target.value];
-            resetFields(); // Reset fields when paragraph changes
-        });
-
-        function collectFormData() {
-            return {
-                selectedParagraph: document.getElementById('paragraph-select').value,
-                paragraphText: document.getElementById('paragraph-text').textContent,
-                simpleSentences: document.getElementById('simple-count').value,
-                compoundSentences: document.getElementById('compound-count').value,
-                complexSentences: document.getElementById('complex-count').value,
-                mainTopic: document.getElementById('main-topic').value,
-                offTopic: document.getElementById('off-topic').value,
-                revision: document.getElementById('revision').value,
-                reflection: document.getElementById('reflection').value
-            };
-        }
-
-        function formatText(data) {
-            return `PARAGRAPH ANALYSIS SUBMISSION
+    function formatText(data) {
+        return `PARAGRAPH ANALYSIS SUBMISSION
 
 Selected Paragraph: ${data.selectedParagraph}
 
@@ -73,70 +73,60 @@ ${data.revision}
 
 REFLECTION:
 ${data.reflection}`;
-        }
+    }
 
-        async function copyToClipboard() {
-            const data = collectFormData();
-            const formattedText = formatText(data);
+    // Function to handle copying to clipboard
+    function copyToClipboard() {
+        const data = collectFormData();
+        const formattedText = formatText(data);
 
-            try {
-                await navigator.clipboard.writeText(formattedText);
+        navigator.clipboard.writeText(formattedText)
+            .then(() => {
                 const successMessage = document.getElementById('success-message');
                 successMessage.style.display = 'block';
                 setTimeout(() => {
                     successMessage.style.display = 'none';
                 }, 3000);
-            } catch (err) {
+            })
+            .catch(err => {
                 console.error('Failed to copy text: ', err);
                 alert('Failed to copy text to clipboard. Please try again.');
-            }
-        }
+            });
+    }
 
-        function saveWork() {
-            try {
-                const data = collectFormData();
-                const formattedText = formatText(data);
+    // Function to handle saving work
+    function downloadWork() {
+        const data = collectFormData();
+        const formattedText = formatText(data);
+        
+        // Create blob and download
+        const blob = new Blob([formattedText], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = `paragraph-analysis-${new Date().toISOString()}.txt`;
+        
+        // Trigger download
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Cleanup
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+    }
 
-                const blob = new Blob([formattedText], { 
-                    type: 'text/plain'
-                });
-
-                const url = URL.createObjectURL(blob);
-                const downloadLink = document.createElement('a');
-                
-                downloadLink.href = url;
-                downloadLink.download = `paragraph-analysis-${new Date().toISOString()}.txt`;
-                
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                
-                setTimeout(() => {
-                    URL.revokeObjectURL(url);
-                }, 100);
-
-            } catch (error) {
-                console.error('Error saving work:', error);
-                alert('There was an error saving your work. Please try again.');
-            }
-        }
-
-        // Add event listeners when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const copyButton = document.getElementById('copyButton');
-            const saveButton = document.getElementById('saveButton');
-            
-            if (copyButton) {
-                copyButton.addEventListener('click', copyToClipboard);
-            }
-            
-            if (saveButton) {
-                saveButton.addEventListener('click', saveWork);
-            }
-
-            // Reset fields on initial load
-            resetFields();
-        });
-    </script>
+    // Wait for DOM to be fully loaded before attaching event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Attach copy button listener
+        document.getElementById('copyButton').addEventListener('click', copyToClipboard);
+        
+        // Attach save button listener
+        document.getElementById('saveButton').addEventListener('click', downloadWork);
+        
+        // Initial reset
+        resetFields();
+    });
+</script>
 </body>
 </html>
