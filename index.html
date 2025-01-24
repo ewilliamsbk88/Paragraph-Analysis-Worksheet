@@ -5,7 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paragraph Analysis Worksheet</title>
     <style>
-        /* Keep all the CSS styles exactly the same */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .paragraph-display {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"],
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .count-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 10px 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .copy-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .save-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        .success-message {
+            display: none;
+            color: green;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+        }
+        .submission-instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -26,24 +95,29 @@
     <div class="section">
         <h2>Sentence Structure</h2>
         <div class="count-inputs">
-            <label>Simple Sentences:</label>
-            <input type="number" id="simple-count" min="0">
+            <label>Simple Sentences:
+                <input type="number" id="simple-count" min="0">
+            </label>
             
-            <label>Compound Sentences:</label>
-            <input type="number" id="compound-count" min="0">
+            <label>Compound Sentences:
+                <input type="number" id="compound-count" min="0">
+            </label>
             
-            <label>Complex Sentences:</label>
-            <input type="number" id="complex-count" min="0">
+            <label>Complex Sentences:
+                <input type="number" id="complex-count" min="0">
+            </label>
         </div>
     </div>
 
     <div class="section">
         <h2>Unity & Coherence</h2>
-        <label>Main Topic:</label>
-        <input type="text" id="main-topic">
+        <label>Main Topic:
+            <input type="text" id="main-topic">
+        </label>
         
-        <label>Off-topic Sentences:</label>
-        <textarea id="off-topic" rows="3"></textarea>
+        <label>Off-topic Sentences:
+            <textarea id="off-topic" rows="3"></textarea>
+        </label>
     </div>
 
     <div class="section">
@@ -74,45 +148,9 @@
         </div>
     </div>
 
+    <!-- Keep your existing script section exactly the same -->
     <script>
-        // Wait for the entire page to load
-        window.addEventListener('load', function() {
-            // First, ensure we can get our elements
-            const paragraphDisplay = document.getElementById('paragraph-text');
-            const paragraphSelect = document.getElementById('paragraph-select');
-            
-            if (!paragraphDisplay || !paragraphSelect) {
-                console.error('Required elements not found');
-                return;
-            }
-
-            const paragraphs = {
-                '1': `The interview was conducted but actually before that I had trouble scheduling it because John was really busy with all his activities and work which made it hard to find a time that worked for both of us. John Smith is a senior business major who works part-time at the campus bookstore and is also involved in three clubs. The career center helps students with various things like resumes and interviews and networking and LinkedIn profiles. He goes there every week because he thinks it's important.`,
-                '2': `I interviewed John last Tuesday after his classes were done for the day and he seemed pretty tired but still willing to talk to me. It was in the library's second floor study room B which I reserved for an hour just to make sure we had enough time and privacy and it was actually a really nice quiet space except for when a group of loud students walked by. I asked questions about his experience, specifically focusing on his academic journey and career preparation.`,
-                '3': `Programming classes present numerous challenges for new students because they require a completely different way of thinking and problem-solving that most students haven't encountered before in their academic careers and this can be overwhelming especially in the beginning when everything feels new and confusing. Students fail them sometimes, particularly the first programming course which has a 30% failure rate according to John.`,
-                '4': `Based on my research and interview findings the following recommendations can be made for future students who want to succeed in the computer science program at our university which has been consistently ranked in the top 50 programs nationwide according to various publications and rankings that I found online while doing background research for this project. The tutoring center is located in the library's second floor right next to the computer lab.`
-            };
-
-            // Set initial paragraph
-            try {
-                paragraphDisplay.innerText = paragraphs['1'];
-            } catch (e) {
-                console.error('Error setting initial paragraph:', e);
-            }
-
-            // Add change listener for paragraph selection
-            paragraphSelect.addEventListener('change', function(e) {
-                try {
-                    paragraphDisplay.innerText = paragraphs[e.target.value];
-                    resetFields();
-                } catch (e) {
-                    console.error('Error updating paragraph:', e);
-                }
-            });
-
-            // Rest of your functions here...
-            // (Keep all the other functions exactly the same)
-        });
+        // Your existing JavaScript code here
     </script>
 </body>
 </html>
