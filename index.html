@@ -1,203 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paragraph Analysis Worksheet</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        select, textarea, input {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .paragraph-display {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 15px 0;
-        }
-        .section {
-            margin: 20px 0;
-            padding: 15px;
-            border-left: 4px solid #0066cc;
-            background: #f9f9f9;
-        }
-        button {
-            background: #0066cc;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 10px 0;
-        }
-        button:hover {
-            background: #0052a3;
-        }
-        .count-inputs {
-            display: grid;
-            grid-template-columns: auto 80px;
-            gap: 10px;
-            align-items: center;
-        }
-        .count-inputs input {
-            width: 80px;
-        }
-        .copy-btn {
-            background: #2ea44f;
-            display: block;
-            width: 100%;
-            font-size: 1.1em;
-            padding: 15px;
-        }
-        .copy-btn:hover {
-            background: #2c974b;
-        }
-        .save-btn {
-            background: #6c757d;
-            display: block;
-            width: 100%;
-            font-size: 1.1em;
-            padding: 15px;
-            margin-top: 10px;
-        }
-        .save-btn:hover {
-            background: #5a6268;
-        }
-        .submission-instructions {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .success-message {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-    </style>
-</head>
-<body>
-    <h1>Paragraph Analysis Worksheet</h1>
+<!-- Keep all the previous HTML and CSS exactly the same until the script section -->
 
-    <div class="section">
-        <label for="paragraph-select">Select a paragraph to analyze:</label>
-        <select id="paragraph-select">
-            <option value="1">Paragraph 1: Career Services</option>
-            <option value="2">Paragraph 2: Methodology</option>
-            <option value="3">Paragraph 3: Academic Challenges</option>
-            <option value="4">Paragraph 4: Recommendations</option>
-        </select>
+<script>
+    const paragraphs = {
+        '1': `The interview was conducted but actually before that I had trouble scheduling it because John was really busy with all his activities and work which made it hard to find a time that worked for both of us. John Smith is a senior business major who works part-time at the campus bookstore and is also involved in three clubs. The career center helps students with various things like resumes and interviews and networking and LinkedIn profiles. He goes there every week because he thinks it's important.`,
+        '2': `I interviewed John last Tuesday after his classes were done for the day and he seemed pretty tired but still willing to talk to me. It was in the library's second floor study room B which I reserved for an hour just to make sure we had enough time and privacy and it was actually a really nice quiet space except for when a group of loud students walked by. I asked questions about his experience, specifically focusing on his academic journey and career preparation.`,
+        '3': `Programming classes present numerous challenges for new students because they require a completely different way of thinking and problem-solving that most students haven't encountered before in their academic careers and this can be overwhelming especially in the beginning when everything feels new and confusing. Students fail them sometimes, particularly the first programming course which has a 30% failure rate according to John.`,
+        '4': `Based on my research and interview findings the following recommendations can be made for future students who want to succeed in the computer science program at our university which has been consistently ranked in the top 50 programs nationwide according to various publications and rankings that I found online while doing background research for this project. The tutoring center is located in the library's second floor right next to the computer lab.`
+    };
 
-        <div id="paragraph-text" class="paragraph-display"></div>
-    </div>
+    // Display initial paragraph
+    document.getElementById('paragraph-text').textContent = paragraphs['1'];
 
-    <div class="section">
-        <h2>Sentence Structure</h2>
-        <div class="count-inputs">
-            <label>Simple Sentences:</label>
-            <input type="number" id="simple-count" min="0">
-            
-            <label>Compound Sentences:</label>
-            <input type="number" id="compound-count" min="0">
-            
-            <label>Complex Sentences:</label>
-            <input type="number" id="complex-count" min="0">
-        </div>
-    </div>
+    function resetFields() {
+        document.getElementById('simple-count').value = '';
+        document.getElementById('compound-count').value = '';
+        document.getElementById('complex-count').value = '';
+        document.getElementById('main-topic').value = '';
+        document.getElementById('off-topic').value = '';
+        document.getElementById('revision').value = '';
+        document.getElementById('reflection').value = '';
+    }
 
-    <div class="section">
-        <h2>Unity & Coherence</h2>
-        <label>Main Topic:</label>
-        <input type="text" id="main-topic">
-        
-        <label>Off-topic Sentences:</label>
-        <textarea id="off-topic" rows="3"></textarea>
-    </div>
+    // Update paragraph when selection changes
+    document.getElementById('paragraph-select').addEventListener('change', function(e) {
+        document.getElementById('paragraph-text').textContent = paragraphs[e.target.value];
+        resetFields();
+    });
 
-    <div class="section">
-        <h2>Your Revision</h2>
-        <textarea id="revision" rows="6"></textarea>
-    </div>
-
-    <div class="section">
-        <h2>Reflection</h2>
-        <textarea id="reflection" rows="4"></textarea>
-    </div>
-
-    <div class="section">
-        <h2>Submit Your Work</h2>
-        <button onclick="copyToClipboard()" class="copy-btn">Copy All Responses</button>
-        <button onclick="downloadWork()" class="save-btn">Save Work to File</button>
-        <div id="success-message" class="success-message">
-            Responses copied! Now go to the Canvas submission box and paste.
-        </div>
-        <div class="submission-instructions">
-            <strong>How to submit:</strong>
-            <ol>
-                <li>Click the "Copy All Responses" button above</li>
-                <li>Click the "Submit Assignment" button in Canvas</li>
-                <li>Paste your responses in the Canvas text box</li>
-                <li>Click "Submit Assignment" to finish</li>
-            </ol>
-        </div>
-    </div>
-
-    <script>
-        const paragraphs = {
-            '1': `The interview was conducted but actually before that I had trouble scheduling it because John was really busy with all his activities and work which made it hard to find a time that worked for both of us. John Smith is a senior business major who works part-time at the campus bookstore and is also involved in three clubs. The career center helps students with various things like resumes and interviews and networking and LinkedIn profiles. He goes there every week because he thinks it's important.`,
-            '2': `I interviewed John last Tuesday after his classes were done for the day and he seemed pretty tired but still willing to talk to me. It was in the library's second floor study room B which I reserved for an hour just to make sure we had enough time and privacy and it was actually a really nice quiet space except for when a group of loud students walked by. I asked questions about his experience, specifically focusing on his academic journey and career preparation.`,
-            '3': `Programming classes present numerous challenges for new students because they require a completely different way of thinking and problem-solving that most students haven't encountered before in their academic careers and this can be overwhelming especially in the beginning when everything feels new and confusing. Students fail them sometimes, particularly the first programming course which has a 30% failure rate according to John.`,
-            '4': `Based on my research and interview findings the following recommendations can be made for future students who want to succeed in the computer science program at our university which has been consistently ranked in the top 50 programs nationwide according to various publications and rankings that I found online while doing background research for this project. The tutoring center is located in the library's second floor right next to the computer lab.`
+    function getFormattedText() {
+        const data = {
+            selectedParagraph: document.getElementById('paragraph-select').value,
+            paragraphText: document.getElementById('paragraph-text').textContent,
+            simpleSentences: document.getElementById('simple-count').value,
+            compoundSentences: document.getElementById('compound-count').value,
+            complexSentences: document.getElementById('complex-count').value,
+            mainTopic: document.getElementById('main-topic').value,
+            offTopic: document.getElementById('off-topic').value,
+            revision: document.getElementById('revision').value,
+            reflection: document.getElementById('reflection').value
         };
 
-        // Display initial paragraph
-        document.getElementById('paragraph-text').textContent = paragraphs['1'];
-
-        function resetFields() {
-            document.getElementById('simple-count').value = '';
-            document.getElementById('compound-count').value = '';
-            document.getElementById('complex-count').value = '';
-            document.getElementById('main-topic').value = '';
-            document.getElementById('off-topic').value = '';
-            document.getElementById('revision').value = '';
-            document.getElementById('reflection').value = '';
-        }
-
-        // Update paragraph when selection changes
-        document.getElementById('paragraph-select').addEventListener('change', function(e) {
-            document.getElementById('paragraph-text').textContent = paragraphs[e.target.value];
-            resetFields();
-        });
-
-        function copyToClipboard() {
-            const data = {
-                selectedParagraph: document.getElementById('paragraph-select').value,
-                paragraphText: document.getElementById('paragraph-text').textContent,
-                simpleSentences: document.getElementById('simple-count').value,
-                compoundSentences: document.getElementById('compound-count').value,
-                complexSentences: document.getElementById('complex-count').value,
-                mainTopic: document.getElementById('main-topic').value,
-                offTopic: document.getElementById('off-topic').value,
-                revision: document.getElementById('revision').value,
-                reflection: document.getElementById('reflection').value
-            };
-
-            const formattedText = `
-PARAGRAPH ANALYSIS SUBMISSION
+        return `PARAGRAPH ANALYSIS SUBMISSION
 
 Selected Paragraph: ${data.selectedParagraph}
 
@@ -220,64 +65,59 @@ ${data.revision}
 
 REFLECTION:
 ${data.reflection}`;
+    }
 
-            navigator.clipboard.writeText(formattedText).then(() => {
-                const successMessage = document.getElementById('success-message');
-                successMessage.style.display = 'block';
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 3000);
-            });
+    function copyToClipboard() {
+        const formattedText = getFormattedText();
+        
+        // Create a temporary textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = formattedText;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        
+        // Select the text and copy
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const successMessage = document.getElementById('success-message');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy text. Please try selecting and copying manually.');
         }
+        
+        document.body.removeChild(textarea);
+    }
 
-        function downloadWork() {
-            const data = {
-                selectedParagraph: document.getElementById('paragraph-select').value,
-                paragraphText: document.getElementById('paragraph-text').textContent,
-                simpleSentences: document.getElementById('simple-count').value,
-                compoundSentences: document.getElementById('compound-count').value,
-                complexSentences: document.getElementById('complex-count').value,
-                mainTopic: document.getElementById('main-topic').value,
-                offTopic: document.getElementById('off-topic').value,
-                revision: document.getElementById('revision').value,
-                reflection: document.getElementById('reflection').value
-            };
-
-            const formattedText = `
-PARAGRAPH ANALYSIS SUBMISSION
-
-Selected Paragraph: ${data.selectedParagraph}
-
-Original Paragraph:
-${data.paragraphText}
-
-SENTENCE STRUCTURE
-Simple Sentences: ${data.simpleSentences}
-Compound Sentences: ${data.compoundSentences}
-Complex Sentences: ${data.complexSentences}
-
-MAIN TOPIC:
-${data.mainTopic}
-
-OFF-TOPIC SENTENCES:
-${data.offTopic}
-
-REVISION:
-${data.revision}
-
-REFLECTION:
-${data.reflection}`;
-
+    function downloadWork() {
+        const formattedText = getFormattedText();
+        
+        try {
+            // Create a blob with the text
             const blob = new Blob([formattedText], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
+            
+            // Create a link and trigger download
             const a = document.createElement('a');
             a.href = url;
-            a.download = `paragraph-analysis-${new Date().toISOString()}.txt`;
+            a.download = `paragraph-analysis.txt`;
             document.body.appendChild(a);
             a.click();
+            
+            // Cleanup
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Failed to download: ', err);
+            alert('Failed to download. Please try copying the text manually.');
         }
-    </script>
+    }
+</script>
 </body>
 </html>
