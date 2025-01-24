@@ -38,6 +38,7 @@
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
+            margin: 10px 0;
         }
         button:hover {
             background: #0052a3;
@@ -50,6 +51,31 @@
         }
         .count-inputs input {
             width: 80px;
+        }
+        .copy-btn {
+            background: #2ea44f;
+            display: block;
+            width: 100%;
+            font-size: 1.1em;
+            padding: 15px;
+        }
+        .copy-btn:hover {
+            background: #2c974b;
+        }
+        .submission-instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -101,7 +127,22 @@
         <textarea id="reflection" rows="4"></textarea>
     </div>
 
-    <button onclick="saveWork()">Save Work to Download</button>
+    <div class="section">
+        <h2>Submit Your Work</h2>
+        <button onclick="copyToClipboard()" class="copy-btn">Copy All Responses</button>
+        <div id="success-message" class="success-message">
+            Responses copied! Now go to the Canvas submission box and paste.
+        </div>
+        <div class="submission-instructions">
+            <strong>How to submit:</strong>
+            <ol>
+                <li>Click the "Copy All Responses" button above</li>
+                <li>Click the "Submit Assignment" button in Canvas</li>
+                <li>Paste your responses in the Canvas text box</li>
+                <li>Click "Submit Assignment" to finish</li>
+            </ol>
+        </div>
+    </div>
 
     <script>
         const paragraphs = {
@@ -119,9 +160,10 @@
             document.getElementById('paragraph-text').textContent = paragraphs[e.target.value];
         });
 
-        function saveWork() {
+        function copyToClipboard() {
             const data = {
                 selectedParagraph: document.getElementById('paragraph-select').value,
+                paragraphText: document.getElementById('paragraph-text').textContent,
                 simpleSentences: document.getElementById('simple-count').value,
                 compoundSentences: document.getElementById('compound-count').value,
                 complexSentences: document.getElementById('complex-count').value,
@@ -131,13 +173,38 @@
                 reflection: document.getElementById('reflection').value
             };
 
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'paragraph-analysis.txt';
-            a.click();
-            URL.revokeObjectURL(url);
+            const formattedText = `
+PARAGRAPH ANALYSIS SUBMISSION
+
+Selected Paragraph: ${data.selectedParagraph}
+
+Original Paragraph:
+${data.paragraphText}
+
+SENTENCE STRUCTURE
+Simple Sentences: ${data.simpleSentences}
+Compound Sentences: ${data.compoundSentences}
+Complex Sentences: ${data.complexSentences}
+
+MAIN TOPIC:
+${data.mainTopic}
+
+OFF-TOPIC SENTENCES:
+${data.offTopic}
+
+REVISION:
+${data.revision}
+
+REFLECTION:
+${data.reflection}`;
+
+            navigator.clipboard.writeText(formattedText).then(() => {
+                const successMessage = document.getElementById('success-message');
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            });
         }
     </script>
 </body>
