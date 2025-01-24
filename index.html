@@ -1,156 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paragraph Analysis Worksheet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .section {
-            margin-bottom: 30px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .paragraph-display {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input[type="number"],
-        input[type="text"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .count-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        button {
-            padding: 10px 20px;
-            margin: 10px 10px 10px 0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .copy-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .save-btn {
-            background-color: #2196F3;
-            color: white;
-        }
-        .success-message {
-            display: none;
-            color: green;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #e8f5e9;
-            border-radius: 4px;
-        }
-        .submission-instructions {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff3e0;
-            border-radius: 4px;
-        }
-    </style>
+    <title>Save Work</title>
 </head>
 <body>
-    <h1>Paragraph Analysis Worksheet</h1>
+    <button id="saveButton">Save Work to Download</button>
 
-    <div class="section">
-        <label for="paragraph-select">Select a paragraph to analyze:</label>
-        <select id="paragraph-select">
-            <option value="1">Paragraph 1: Career Services</option>
-            <option value="2">Paragraph 2: Methodology</option>
-            <option value="3">Paragraph 3: Academic Challenges</option>
-            <option value="4">Paragraph 4: Recommendations</option>
-        </select>
-
-        <div id="paragraph-text" class="paragraph-display"></div>
-    </div>
-
-    <div class="section">
-        <h2>Sentence Structure</h2>
-        <div class="count-inputs">
-            <label>Simple Sentences:
-                <input type="number" id="simple-count" min="0">
-            </label>
-            
-            <label>Compound Sentences:
-                <input type="number" id="compound-count" min="0">
-            </label>
-            
-            <label>Complex Sentences:
-                <input type="number" id="complex-count" min="0">
-            </label>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Unity & Coherence</h2>
-        <label>Main Topic:
-            <input type="text" id="main-topic">
-        </label>
-        
-        <label>Off-topic Sentences:
-            <textarea id="off-topic" rows="3"></textarea>
-        </label>
-    </div>
-
-    <div class="section">
-        <h2>Your Revision</h2>
-        <textarea id="revision" rows="6"></textarea>
-    </div>
-
-    <div class="section">
-        <h2>Reflection</h2>
-        <textarea id="reflection" rows="4"></textarea>
-    </div>
-
-    <div class="section">
-        <h2>Submit Your Work</h2>
-        <button id="copyButton" class="copy-btn">Copy All Responses</button>
-        <button id="saveButton" class="save-btn">Save Work to File</button>
-        <div id="success-message" class="success-message">
-            Responses copied! Now go to the Canvas submission box and paste.
-        </div>
-        <div class="submission-instructions">
-            <strong>How to submit:</strong>
-            <ol>
-                <li>Click the "Copy All Responses" button above</li>
-                <li>Click the "Submit Assignment" button in Canvas</li>
-                <li>Paste your responses in the Canvas text box</li>
-                <li>Click "Submit Assignment" to finish</li>
-            </ol>
-        </div>
-    </div>
-
-    <!-- Keep your existing script section exactly the same -->
     <script>
-        // Your existing JavaScript code here
+        // Initialize data structure (replace with your actual data structure)
+        let data = {
+            // Your data structure here
+            // Example:
+            analysis: "Sample analysis",
+            timestamp: new Date().toISOString()
+        };
+
+        // Main save function with error handling
+        function saveWork() {
+            try {
+                if (!data) {
+                    throw new Error('No data available to save');
+                }
+
+                // Create the blob with proper error handling
+                const blob = new Blob([JSON.stringify(data, null, 2)], { 
+                    type: 'application/json'
+                });
+
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const downloadLink = document.createElement('a');
+                
+                // Set download attributes
+                downloadLink.href = url;
+                downloadLink.download = `paragraph-analysis-${new Date().toISOString()}.json`;
+                
+                // Append link to body, click, and remove
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Clean up the URL object after a short delay
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 100);
+
+            } catch (error) {
+                console.error('Error saving work:', error);
+                alert('There was an error saving your work. Please try again.');
+            }
+        }
+
+        // Add event listener when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveButton = document.getElementById('saveButton');
+            if (saveButton) {
+                saveButton.addEventListener('click', saveWork);
+            }
+        });
     </script>
 </body>
 </html>
