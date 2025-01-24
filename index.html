@@ -1,30 +1,194 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Save Work</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paragraph Analysis Worksheet</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        select, textarea, input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .paragraph-display {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #0066cc;
+            background: #f9f9f9;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+        .count-inputs {
+            display: grid;
+            grid-template-columns: auto 80px;
+            gap: 10px;
+            align-items: center;
+        }
+        .count-inputs input {
+            width: 80px;
+        }
+        .copy-btn {
+            background: #2ea44f;
+            display: block;
+            width: 100%;
+            font-size: 1.1em;
+            padding: 15px;
+        }
+        .copy-btn:hover {
+            background: #2c974b;
+        }
+        .save-btn {
+            background: #6c757d;
+            display: block;
+            width: 100%;
+            font-size: 1.1em;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .save-btn:hover {
+            background: #5a6268;
+        }
+        .submission-instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .success-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
-    <button id="saveButton">Save Work to Download</button>
+    <!-- Previous HTML remains the same until the submission section -->
+
+    <div class="section">
+        <h2>Submit Your Work</h2>
+        <button id="copyButton" class="copy-btn">Copy All Responses</button>
+        <button id="saveButton" class="save-btn">Save Work to File</button>
+        <div id="success-message" class="success-message">
+            Responses copied! Now go to the Canvas submission box and paste.
+        </div>
+        <div class="submission-instructions">
+            <strong>How to submit:</strong>
+            <ol>
+                <li>Click the "Copy All Responses" button above</li>
+                <li>Click the "Submit Assignment" button in Canvas</li>
+                <li>Paste your responses in the Canvas text box</li>
+                <li>Click "Submit Assignment" to finish</li>
+            </ol>
+        </div>
+    </div>
 
     <script>
-        // Initialize data structure (replace with your actual data structure)
-        let data = {
-            // Your data structure here
-            // Example:
-            analysis: "Sample analysis",
-            timestamp: new Date().toISOString()
+        const paragraphs = {
+            '1': `The interview was conducted but actually before that I had trouble scheduling it because John was really busy with all his activities and work which made it hard to find a time that worked for both of us. John Smith is a senior business major who works part-time at the campus bookstore and is also involved in three clubs. The career center helps students with various things like resumes and interviews and networking and LinkedIn profiles. He goes there every week because he thinks it's important.`,
+            '2': `I interviewed John last Tuesday after his classes were done for the day and he seemed pretty tired but still willing to talk to me. It was in the library's second floor study room B which I reserved for an hour just to make sure we had enough time and privacy and it was actually a really nice quiet space except for when a group of loud students walked by. I asked questions about his experience, specifically focusing on his academic journey and career preparation.`,
+            '3': `Programming classes present numerous challenges for new students because they require a completely different way of thinking and problem-solving that most students haven't encountered before in their academic careers and this can be overwhelming especially in the beginning when everything feels new and confusing. Students fail them sometimes, particularly the first programming course which has a 30% failure rate according to John.`,
+            '4': `Based on my research and interview findings the following recommendations can be made for future students who want to succeed in the computer science program at our university which has been consistently ranked in the top 50 programs nationwide according to various publications and rankings that I found online while doing background research for this project. The tutoring center is located in the library's second floor right next to the computer lab.`
         };
 
-        // Main save function with error handling
+        // Display initial paragraph
+        document.getElementById('paragraph-text').textContent = paragraphs['1'];
+
+        // Update paragraph when selection changes
+        document.getElementById('paragraph-select').addEventListener('change', function(e) {
+            document.getElementById('paragraph-text').textContent = paragraphs[e.target.value];
+        });
+
+        function collectFormData() {
+            return {
+                selectedParagraph: document.getElementById('paragraph-select').value,
+                paragraphText: document.getElementById('paragraph-text').textContent,
+                simpleSentences: document.getElementById('simple-count').value,
+                compoundSentences: document.getElementById('compound-count').value,
+                complexSentences: document.getElementById('complex-count').value,
+                mainTopic: document.getElementById('main-topic').value,
+                offTopic: document.getElementById('off-topic').value,
+                revision: document.getElementById('revision').value,
+                reflection: document.getElementById('reflection').value
+            };
+        }
+
+        function formatText(data) {
+            return `
+PARAGRAPH ANALYSIS SUBMISSION
+
+Selected Paragraph: ${data.selectedParagraph}
+
+Original Paragraph:
+${data.paragraphText}
+
+SENTENCE STRUCTURE
+Simple Sentences: ${data.simpleSentences}
+Compound Sentences: ${data.compoundSentences}
+Complex Sentences: ${data.complexSentences}
+
+MAIN TOPIC:
+${data.mainTopic}
+
+OFF-TOPIC SENTENCES:
+${data.offTopic}
+
+REVISION:
+${data.revision}
+
+REFLECTION:
+${data.reflection}`;
+        }
+
+        function copyToClipboard() {
+            const data = collectFormData();
+            const formattedText = formatText(data);
+
+            navigator.clipboard.writeText(formattedText).then(() => {
+                const successMessage = document.getElementById('success-message');
+                successMessage.style.display = 'block';
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            });
+        }
+
         function saveWork() {
             try {
-                if (!data) {
-                    throw new Error('No data available to save');
-                }
+                const data = collectFormData();
+                const formattedText = formatText(data);
 
                 // Create the blob with proper error handling
-                const blob = new Blob([JSON.stringify(data, null, 2)], { 
-                    type: 'application/json'
+                const blob = new Blob([formattedText], { 
+                    type: 'text/plain'
                 });
 
                 // Create download link
@@ -33,7 +197,7 @@
                 
                 // Set download attributes
                 downloadLink.href = url;
-                downloadLink.download = `paragraph-analysis-${new Date().toISOString()}.json`;
+                downloadLink.download = `paragraph-analysis-${new Date().toISOString()}.txt`;
                 
                 // Append link to body, click, and remove
                 document.body.appendChild(downloadLink);
@@ -51,9 +215,15 @@
             }
         }
 
-        // Add event listener when the DOM is fully loaded
+        // Add event listeners when the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', function() {
+            const copyButton = document.getElementById('copyButton');
             const saveButton = document.getElementById('saveButton');
+            
+            if (copyButton) {
+                copyButton.addEventListener('click', copyToClipboard);
+            }
+            
             if (saveButton) {
                 saveButton.addEventListener('click', saveWork);
             }
